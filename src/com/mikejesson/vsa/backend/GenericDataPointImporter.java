@@ -236,6 +236,8 @@ public class GenericDataPointImporter extends AbstractDataPointImporter {
 						// Field codes are x, y, z, xs, ys, zs, xc, yc, zc
 						switch (fieldCode.charAt(0)) {
 							case DADefinitions.FIELD_COMPONENT_SPECIFIER_IGNORE:
+							case DADefinitions.FIELD_SPECIFIER_SNR:
+							case DADefinitions.FIELD_SPECIFIER_CORR:
 								continue;
 							case DADefinitions.FIELD_COMPONENT_SPECIFIER_U:
 								componentIndex = 0;
