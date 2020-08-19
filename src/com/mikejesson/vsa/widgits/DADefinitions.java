@@ -21,7 +21,7 @@ package com.mikejesson.vsa.widgits;
  *
  */
 public class DADefinitions {
-	public static final String VERSION = "1.5.64";
+	public static final String VERSION = "1.5.65";
 	
 	public static final int FILE_FORMAT_2_FIRST_VERSION_NUMBER = 2;
 	
