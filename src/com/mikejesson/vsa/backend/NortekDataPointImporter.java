@@ -1163,7 +1163,7 @@ public class NortekDataPointImporter extends AbstractDataPointImporter {
 	private VelocityDataBlockData extractVECVelocityDataBlockData(byte[] dataBlock, byte status) throws Exception {
 		int dataBlockByteIndex = 0;
 		VelocityDataBlockData vdbd = new VelocityDataBlockData();
-		vdbd.mScaleFactor = (status & DADefinitions.VNO_SCALING_FACTOR_BIT_MASK) > 0 ? DADefinitions.VNO_SCALING_BIT_SET_FACTOR : DADefinitions.VNO_SCALING_BIT_NOT_SET_FACTOR;
+		vdbd.mScaleFactor = (status & DADefinitions.VEC_SCALING_FACTOR_BIT_MASK) > 0 ? DADefinitions.VNO_SCALING_BIT_SET_FACTOR : DADefinitions.VNO_SCALING_BIT_NOT_SET_FACTOR;
 		
 		// The Sync and Id are no longer passed in as they are used to determine the type of the block read
 		// First datum in the data block is Sync (1 byte)...

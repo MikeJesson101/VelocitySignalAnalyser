@@ -405,6 +405,7 @@ public class DADefinitions {
 	public static final String VNO_XML_PROBE = "PROBE";
 	
 	public static final int VNO_SCALING_FACTOR_BIT_MASK = 0x20;
+	public static final int VEC_SCALING_FACTOR_BIT_MASK = 0x02;
 	public static final int VNO_SCALING_BIT_NOT_SET_FACTOR = 1000;
 	public static final int VNO_SCALING_BIT_SET_FACTOR = 10000;
 	
