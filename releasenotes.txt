@@ -1,3 +1,6 @@
+v1.5.66
+	Added functionality for setting of fluid density and viscosity. This has not been properly tested - please use v1.5.65 if you encounter any problems.
+
 v1.5.65
 	Fix bug for Nortek Vector instruments where scaling was incorrectly set in some cases.
 
