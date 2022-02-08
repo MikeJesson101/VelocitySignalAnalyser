@@ -1,0 +1,168 @@
+v1.5.67
+	Corrected fluid density and viscosity GUI to allow decimal places.
+
+v1.5.66
+	Added functionality for setting of fluid density and viscosity. This has not been properly tested - please use v1.5.65 if you encounter any problems.
+
+v1.5.65
+	Fix bug for Nortek Vector instruments where scaling was incorrectly set in some cases.
+
+v1.5.64
+	Fix bug with changing of the boundary definition file.
+
+v1.5.63
+	Decimal separator in CSV files can now be specified through the configuration panel. This gets around an issue where the CSV file does not use the same
+	decimal separator as is standard for the country set on the system the VSA is being run on.
+
+v1.5.62
+	Fixed locale issue when importing Vectrino II Profiler .dat files (files converted with a comma as the decimal separator where not imported correctly).
+
+v1.5.61
+	Added file extension column to import dialog table, and formatted the "Last Modified" time.
+
+v1.5.60
+	Added option to scale wavelet transforms by the instantaneous power before normalising by the total energy (see v1.5.60 of the User Guide).
+
+v1.5.59
+	Improved scaling for FWT contour plots. At each time, the power is scaled to match the power of the original time-series at that time, and then normalised by the mean power.
+
+v1.5.58
+	Improved scaling for CWT contour plots. At each time, the power is scaled to match the power of the original time-series at that time, and then normalised by the mean power.
+
+v1.5.57
+	Tidied up probe axis transformation from the file name and rotation correction. The configuration "Invert axes" check-boxes should be configured such that the data are in a left-handed co-ordinate system.
+
+v1.5.56
+	Fixed rotation correction calculation bug.
+	
+v1.5.55
+	Slight modifications to multi-run calculations to improve speed.
+
+v1.5.54
+	Fixed multi-run bug where mean values for properties such as turbulence intensity were not calculated correctly for the mean run dataset.
+
+v1.5.53
+	Changed TI graph to show true TI rather than scaled by the overall mean U velocity.
+
+v1.5.52
+	Changed power spectral density to remove the mean before calculating, so it now only operates on the fluctuating part of the signal.
+	The integral (mean power) is therefore the standard deviation of the input signal.
+
+v1.5.50
+	Default to the last used configuration file on start-up.
+
+v1.5.48
+	Scale wavelet transforms so the total energy (integral over frequency and time of the wavelet transform output) is the same as the time-series.
+
+v1.5.46
+	Power spectral density is now scaled such that the integral of the PSD over frequency equals the mean power of the time-series.
+	
+v1.5.45
+	Added option to use Welch's method to calculate the power spectral density.
+	Corrected calculation of -5/3 line for power spectral density.
+	Corrected duplicate of ".csv" file extension, which prevented .csv file import.
+
+v1.5.44
+	Added Matlab connection output for scatter (XY) graphs.
+
+v1.5.43
+	Fix locale issues when importing converted Nortek files (.dat).
+
+v1.5.42
+	Added display of "-5/3" line to power spectrum display.
+
+v1.5.41
+	Added functionality to allow the order of the spike replacement polynomial to be set by the user.
+
+v1.5.40
+	Corrected bug in calculation of Q/A.
+	
+v1.5.39
+	Increased allowed range of values for bank positions and water depth.
+	
+v1.5.38
+	Some of the configuration which was global (default directories, CSV file separator) is now configurable on individual datasets.
+	The format of the CSV file can now be specified in the configuration panel, using 'x', 'y' and 'z' to represent the velocity in the x, y and z directions respectively, 'xs', 'ys' and 'zs' to represent the SNR in the three directions, and 'xc', 'yc' and 'zc' to represent the correlation in the three dimensions. The field codes are separated by a comma, e.g. x,y,z,xc,yc,zc would be used for a CSV file holding the three velocity components followed by the three correlation values, x,xs,y,ys,z,zs would be used for a CSV file holding the velocity in the x direction followed by the SNR for the x velocity, followed by the velocity in the y direction, etc..
+
+v1.5.37
+	Added functionality to allow configuration files to be copied so that different configuration files can be created and used for different projects.
+
+v1.5.36
+	Fix bug introduced in v1.5.35 where initialisation failed if no configuration file was available.
+	
+v1.5.35
+	Configuration file can now be selected at start-up via drop-down on licence box.
+	
+v1.5.34
+	This release includes a number of development changes which should not affect existing users.
+	In addition, it contains:
+		Fix for a configuration bug ("seconds to ignore" was not being saved correctly).
+		Multi-run functionality now does the filtering at the run level, rather than on the run-mean time-series.
+		Multi-run functionality is now added for Vectrino II ".mat" files.
+		
+v1.5.31
+	Modified the velocity correlation calculation (previously this was a stub which just output data to the console).
+	Fixed bug in which right-click functionality on the main velocity graphs had been broken.
+
+v1.5.30
+	Continuous Wavelet Transform (CWT) functionality added.
+
+v1.5.29
+	Cosmetic changes only.
+
+v1.5.28
+	Added auto-trim functionality.
+	The user guide has also been updated!
+
+v1.5.27
+	Added wavelet analysis functionality.
+
+v1.5.26
+	Minor bug fixes:
+		Remove spaces from variable names when writing datapoint details to Matlab file.
+		Correct enabling of configuration "Apply" button when changing bank positions
+
+v1.5.25
+	Fixed bug retrieving probe setup details for saved datasets (bug introduced in v1.5.23).
+
+v1.5.24
+	Added functionality to allow sending of datapoint details direct to Matlab.
+	Corrected errors in text.
+
+v1.5.23
+	Dataset specific configuration GUI now uses the same layout as for the configuration dialog. This does not affect functionality.
+
+v1.5.22
+	Fixed freeze when using direct Matlab connection.
+
+v1.5.21
+	Corrected bug with enabling of "Export as Matlab Script" functionality (the old export functionality). This should work as before.
+	***Please Note*** When using the new direct export to Matlab functionality introduced in v1.5.20, the VSA has been seen to freeze. I am working on a fix.
+
+v1.5.20
+	Improved Matlab integration - figures can now be exported directly to Matlab without cutting and pasting of a script.
+	Added version checking so any new updates should be shown in the about box.
+
+v1.5.19
+	Fixed scaling bug in power spectrum estimation.
+
+v1.5.17
+	Added functionality to allow all velocity details (velocities as measured by probe, translated velocities and filtered velocities, plus correlation and SNR values) to be exported to an ASCII file.
+
+v1.5.16
+	Fix Vector import bugs - probe id and sampling rate were read incorrectly from .vec files.
+
+v1.5.15
+	Added option to filter by percentage of mean correlation and SNR rather than an absolute value.
+
+v1.5.14
+	Fix lock bug.
+
+v1.5.13
+	Fix converted Vector file import bug, introduced when the SNR and Correlation filtering was added.
+
+v1.5.12
+	Made the number of windows used for the Bartlett's method power spectrum calculation configurable.
+
+v1.5.11
+	Fix binary file read bug which was putting the y-velocities into the z-velocities component.
