@@ -22,7 +22,7 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+
 import java.util.Vector;
 
 import com.mikejesson.majfc.helpers.MAJFCTools;
@@ -43,11 +43,11 @@ import com.mikejesson.vsa.widgits.DAStrings;
  * @author MAJ727
  *
  */
-public class SontekDataPointImporter extends AbstractDataPointImporter {
+public class SontekDataPointImporterStefania extends AbstractDataPointImporter {
 	/**
 	 * Constructor 
 	 */
-	public SontekDataPointImporter() {
+	public SontekDataPointImporterStefania() {
 	}
 	
 	/**
@@ -65,11 +65,10 @@ public class SontekDataPointImporter extends AbstractDataPointImporter {
 	 * @throws BackEndAPIException 
 	 */
 	public Vector<DataPointCoordinates> importDataPointDataFromSontekSingleProbeBinaryFile(DataSet dataSet, GenericImportDetails importDetails) throws BackEndAPIException {                           
-		final int UC_SOFTWARE_VERSION_LENGTH = 8;
-		final int UC_PROBE_STATUS_LENGTH = 8;
-		final int UC_SPARE_1_LENGTH = 6;
-		final int UC_SPARE_2_LENGTH = 2;
-		final ByteOrder ENDIAN = ByteOrder.LITTLE_ENDIAN;
+		final int SOFTWARE_VERSION_LENGTH = 8;
+		final int SOFTWARE_VERSION_OFFSET = 0;
+		final int PROBE_ID_LENGTH = 6;
+		final int PROBE_ID_OFFSET = 24 + 7;
 		
 		DataPoint dataPoint = dataSet.createNewDataPoint(importDetails.getFirstYCoord(), importDetails.getFirstZCoord(), importDetails, 0, dataSet);
 		Vector<DataPointCoordinates> addedDataPoints = new Vector<BackEndAPI.DataPointCoordinates>(10);
@@ -77,83 +76,21 @@ public class SontekDataPointImporter extends AbstractDataPointImporter {
 		try{
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(importDetails.mFile));
 
-			byte[] userSetup = MAJFCTools.readBytesFromFile(bufferedInputStream, 324);
-			int offset = 0;
+			byte[] userSetup = MAJFCTools.readBytesFromFile(bufferedInputStream, 332);
 
 			// First 8 bytes are software version...
-			StringBuffer sbSoftwareVersion = new StringBuffer(UC_SOFTWARE_VERSION_LENGTH);
-			for (int i = 0; i < UC_SOFTWARE_VERSION_LENGTH; ++i) {
-				sbSoftwareVersion.append((char) userSetup[offset++]);
+			StringBuffer sbSoftwareVersion = new StringBuffer(SOFTWARE_VERSION_LENGTH);
+			for (int i = 0; i < SOFTWARE_VERSION_LENGTH; ++i) {
+				sbSoftwareVersion.append((char) userSetup[i + SOFTWARE_VERSION_OFFSET]);
 			}
 
-			// Next 8 bytes are date-timestamp. 2 bytes for year, then 1 byte each for day, month, minute, hour, hundreths of seconds, seconds
-			int year = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getShort(); // C int
-			int day = (int) userSetup[offset++];
-			int month = (int) userSetup[offset++];
-			int minute = (int) userSetup[offset++];
-			int hour = (int) userSetup[offset++];
-			int hundreths = (int) userSetup[offset++];
-			int seconds = (int) userSetup[offset++];
-			
-			StringBuffer sbProbeStatus = new StringBuffer(UC_PROBE_STATUS_LENGTH);
-			for (int i = 0; i < UC_PROBE_STATUS_LENGTH; ++i) {
-				sbProbeStatus.append((int) userSetup[offset++]);
-			}
-			
-			int cpuSoftwareVerNum = userSetup[offset++];
-			int dspSoftwareVerNum = userSetup[offset++];
-			int probeTypeCode = userSetup[offset++];
-			int sensorOrientation = userSetup[offset++];
-			
-			boolean compassInstalled = userSetup[offset++] == 1;
-			boolean recorderInstalled = userSetup[offset++] == 1;
-			boolean temperatureInstalled = userSetup[offset++] == 1;
-			boolean pressureInstalled = userSetup[offset++] == 1;
-			int pressureScale = ByteBuffer.wrap(new byte[] {	
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getInt(); // C long
-			int pressureOffset = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getInt(); // C long
-			int compassOffset = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getShort(); // C int
+			// .. 8 bytes of date-time
+					StringBuffer sbDateTime = new StringBuffer(SOFTWARE_VERSION_LENGTH);
+					for (int i = 0; i < SOFTWARE_VERSION_LENGTH; ++i) {
+						sbDateTime.append((char) userSetup[i + 8]);
+					}
 
-			StringBuffer sbSpare1 = new StringBuffer(UC_SPARE_1_LENGTH);
-			for (int i = 0; i < UC_SPARE_1_LENGTH; ++i) {
-				sbSpare1.append((char) userSetup[offset++]);
-			}
-			
-			int unitsSystem = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getShort(); // C int
-			float temperature = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getFloat();
-			float salinity = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getFloat();
-			float speedOfSound = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getFloat();
-			float samplingRate = ByteBuffer.wrap(new byte[] {
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++],
-					userSetup[offset++]}).order(ENDIAN).getFloat();
-
+			int probeTypeCode = userSetup[35];
 			ProbeDetail probeDetails = new ProbeDetail();
 			String probeType = "Unrecognised Sontek";
 			
@@ -170,17 +107,20 @@ public class SontekDataPointImporter extends AbstractDataPointImporter {
 			}
 			
 			probeDetails.set(BackEndAPI.PD_KEY_PROBE_TYPE, probeType);
+			double samplingRate = ByteBuffer.wrap(new byte[] {userSetup[67], userSetup[68], userSetup[69], userSetup[70]}).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+
 			probeDetails.set(BackEndAPI.PD_KEY_SAMPLING_RATE, String.valueOf(samplingRate));
 			
-			byte[] probeConfig = MAJFCTools.readBytesFromFile(bufferedInputStream, 254);
-			final int PC_SPARE_1_LENGTH = 10;
-			final int PC_PROBE_SERIAL_NUMBER_LENGTH = 6;
-			offset = PC_SPARE_1_LENGTH;
-			StringBuffer sbProbeSerialNumber = new StringBuffer(PC_PROBE_SERIAL_NUMBER_LENGTH);
-			for (int i = 0; i < PC_PROBE_SERIAL_NUMBER_LENGTH; ++i) {
-				sbProbeSerialNumber.append((char) probeConfig[offset++]);
+			boolean compassInstalled = userSetup[36] == 1;
+			boolean temperatureInstalled = userSetup[38] == 1;
+			boolean pressureInstalled = userSetup[39] == 1;
+
+			byte[] probeConfig = MAJFCTools.readBytesFromFile(bufferedInputStream, 278);
+			StringBuffer sbProbeId = new StringBuffer(PROBE_ID_LENGTH);
+			for (int i = 0; i < PROBE_ID_LENGTH; ++i) {
+				sbProbeId.append((char) probeConfig[i + PROBE_ID_OFFSET]);
 			}
-			probeDetails.set(BackEndAPI.PD_KEY_PROBE_ID, sbProbeSerialNumber.toString());
+			probeDetails.set(BackEndAPI.PD_KEY_PROBE_ID, sbProbeId.toString());
 
 			DataSetConfig configData = dataSet.getConfigData();
 			Double measurementsPerSplit = configData.get(BackEndAPI.DSC_KEY_LARGE_FILE_MEAS_PER_SPLIT);
@@ -210,26 +150,22 @@ public class SontekDataPointImporter extends AbstractDataPointImporter {
 				}
 
 				// First part of data block is a short - sample number.
-				byte[] sampleNumber = new byte[] {dataBlock[0], dataBlock[1]};
-				double sN = MAJFCTools.makeUnsignedIntFromBytes(sampleNumber);
 				byte[] velocities = new byte[12];
 				for (int i = 0; i < velocities.length; ++i) {
-					velocities[i] = dataBlock[i];
+					velocities[i] = dataBlock[i + 2];
 				}
-				FloatBuffer dataBlockAsFloats = ByteBuffer.wrap(velocities).order(ByteOrder.BIG_ENDIAN).asFloatBuffer();
+				FloatBuffer dataBlockAsFloats = ByteBuffer.wrap(velocities).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
 				float xVelocity = dataBlockAsFloats.get(0);
-				byte[] testBytes = { velocities[7], velocities[6], velocities[5], velocities[4]};
-				int test = MAJFCTools.makeSignedIntFromBytes(testBytes);
 				float yVelocity = dataBlockAsFloats.get(1);
 				float zVelocity = dataBlockAsFloats.get(2);
 
-				double xAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[14]});
-				double yAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[15]});
-				double zAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[16]});
+				double xAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[15]});
+				double yAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[16]});
+				double zAmp = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[17]});
 
-				double xCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[17]});
-				double yCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[18]});
-				double zCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[19]});
+				double xCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[18]});
+				double yCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[19]});
+				double zCorr = MAJFCTools.makeUnsignedIntFromBytes(new byte[] {dataBlock[20]});
 
 				// Do this here (rather than after the increment of numberOfMeasurements) so that we only create a new data point
 				// if there are measurements to go in it
@@ -245,13 +181,8 @@ public class SontekDataPointImporter extends AbstractDataPointImporter {
 				++numberOfMeasurements;
 				
 				// Event Counter - scrap
-				try {
-					@SuppressWarnings("unused")
-					byte[] eventCounterBlock = MAJFCTools.readBytesFromFile(bufferedInputStream, 2);
-				} catch (MAJFCToolsEoFException eof) {
-					// No problem, we've just got to the end of the file
-					break;
-				}
+				@SuppressWarnings("unused")
+				byte[] eventCounterBlock = MAJFCTools.readBytesFromFile(bufferedInputStream, 2);
 			}
 
 			bufferedInputStream.close();

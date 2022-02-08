@@ -20,6 +20,7 @@ import java.awt.HeadlessException;
 import java.util.Vector;
 
 import com.mikejesson.majfc.guiComponents.MAJFCStackedPanelWithFrame;
+import com.mikejesson.vsa.backEndExposed.BackEndAPI;
 import com.mikejesson.vsa.backEndExposed.BackEndAPIException;
 import com.mikejesson.vsa.backEndExposed.BackEndAPI.AbstractDataSetUniqueId;
 import com.mikejesson.vsa.backEndExposed.BackEndAPI.DataPointSummaryIndex;
@@ -51,7 +52,12 @@ public class MeanVelocityKineticEnergyGraph extends AbstractCrossSectionColourCo
 	 * {@link AbstractCrossSectionColourCodedGraph#getDatumAt(AbstractDataSetUniqueId, DataPointSummaryIndex, int, int) }
 	 */
 	protected double getDatumAt(AbstractDataSetUniqueId dataSetId, DataPointSummaryIndex dpsIndex, int yCoord, int zCoord) throws BackEndAPIException {
-		return (1d/2) * DADefinitions.WATER_DENSITY_RHO * Math.pow(DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, mDPSIndex), 2);
+		try {
+			double fluidDensity = DAFrame.getBackEndAPI().getConfigData(dataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+			return (1d/2) * fluidDensity * Math.pow(DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, mDPSIndex), 2);
+		} catch (BackEndAPIException theException) {
+			return 0;
+		}
 	}
 	
 	@Override

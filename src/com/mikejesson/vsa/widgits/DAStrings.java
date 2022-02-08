@@ -139,6 +139,8 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 	public static final DAStringIndex ERROR_MOVING_TEMP_FILE_MSG = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex APPLY = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex UPDATING_SUMMARY_DATA = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
+	public static final DAStringIndex FLUID_DENSITY_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
+	public static final DAStringIndex FLUID_KINEMATIC_VISCOSITY_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex LEFT_BANK_POSITION_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex RIGHT_BANK_POSITION_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex WATER_DEPTH_POSITION_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
@@ -166,7 +168,7 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 	public static final DAStringIndex CREATING_RC_BATCHES_PROGRESS_TITLE = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
-	public static final DAStringIndex GENERAL_CONFIG_TAB_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
+	public static final DAStringIndex DATA_FILES_CONFIG_TAB_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex DATA_SET_CONFIG_TAB_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex DATA_POINT_CONFIG_TAB_LABEL = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
 	public static final DAStringIndex DATA_FILE_VELOCITY_UNIT_OPTIONS = new DAStrings.DAStringIndex(NUMBER_OF_STRING_INDICES++);
@@ -1393,6 +1395,8 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 	public static final String ERROR_MOVING_TEMP_FILE_MSG_STR = "ERROR_MOVING_TEMP_FILE_MSG";
 	public static final String APPLY_STR = "APPLY";
 	public static final String UPDATING_SUMMARY_DATA_STR = "UPDATING_SUMMARY_DATA";
+	public static final String FLUID_DENSITY_LABEL_STR = "FLUID_KINEMATIC_VISCOSITY_LABEL";
+	public static final String FLUID_KINEMATIC_VISCOSITY_LABEL_STR = "FLUID_KINEMATIC_VISCOSITY_LABEL";
 	public static final String LEFT_BANK_POSITION_LABEL_STR = "LEFT_BANK_POSITION_LABEL";
 	public static final String RIGHT_BANK_POSITION_LABEL_STR = "RIGHT_BANK_POSITION_LABEL";
 	public static final String WATER_DEPTH_POSITION_LABEL_STR = "WATER_DEPTH_POSITION_LABEL";
@@ -1420,7 +1424,7 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 	public static final String CREATING_RC_BATCHES_PROGRESS_TITLE_STR = "CREATING_RC_BATCHES_PROGRESS_TITLE";
 	public static final String ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE_STR = "ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE";
 	public static final String ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG_STR = "ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG";
-	public static final String GENERAL_CONFIG_TAB_LABEL_STR = "GENERAL_CONFIG_TAB_LABEL";
+	public static final String DATA_FILES_CONFIG_TAB_LABEL_STR = "GENERAL_CONFIG_TAB_LABEL";
 	public static final String DATA_SET_CONFIG_TAB_LABEL_STR = "DATA_SET_CONFIG_TAB_LABEL";
 	public static final String DATA_POINT_CONFIG_TAB_LABEL_STR = "DATA_POINT_CONFIG_TAB_LABEL";
 	public static final String DATA_FILE_VELOCITY_UNIT_OPTIONS_STR = "DATA_FILE_VELOCITY_UNIT_OPTIONS";
@@ -2596,9 +2600,9 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		"Configuration", // CONFIGURATION    
 		"Set configuration options", // CONFIGURATION_BUTTON_DESC  
 		"Configuration", // CONFIGURATION_DIALOG_TITLE    
-		"Default data file directory: ", // DEFAULT_DATA_FILE_PATH_LABEL 
+		"Default output data file directory: ", // DEFAULT_DATA_FILE_PATH_LABEL 
 		"Select", // SELECT    
-		"Select Data File Path", // SELECT_DATA_FILE_PATH_DIALOG_TITLE 
+		"Select Output Data File Path", // SELECT_DATA_FILE_PATH_DIALOG_TITLE 
 		"Name New Data Set", // NEW_DATA_SET_FILENAME_DIALOG_TITLE 
 		"No Such Data Point", // NO_SUCH_DATA_POINT_TITLE 
 		"The data point doesn't exist", // NO_SUCH_DATA_POINT_MSG 
@@ -2630,8 +2634,8 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		"Space: ;Comma:,;Tab:\t", // DATA_FILE_DELIMITER_OPTIONS   
 		"Data point data file decimal separator: ", // DATA_FILE_CSV_DECIMAL_SEPARATOR_LABEL 
 		"Point:.;Comma:,", // DATA_FILE_CSV_DECIMAL_SEPARATOR_OPTIONS   
-		"Default raw data file directory:", // DEFAULT_CSV_FILE_PATH_LABEL 
-		"Select Raw Data File Path", // SELECT_CSV_FILE_PATH_DIALOG_TITLE 
+		"Default input data file directory:", // DEFAULT_CSV_FILE_PATH_LABEL 
+		"Select Input Data File Path", // SELECT_CSV_FILE_PATH_DIALOG_TITLE 
 		"Choose File", // CHOOSE_CSV_FILE   
 		"Another File", // ADD_ANOTHER_CSV_FILE   
 		"Data Set Graphs", // DATA_SET_GRAPHS  
@@ -2649,6 +2653,8 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		"Error while trying to move the temporary file to ,", // ERROR_MOVING_TEMP_FILE_MSG 
 		"Apply", // APPLY    
 		"Updating Summary Data", // UPDATING_SUMMARY_DATA  
+		"Fluid Density (kg/m3): ", // FLUID_DENSITY_LABEL 
+		"Fluid Kinematic Viscosity (m2/s; x10^-6): ", // FLUID_KINEMATIC_VISCOSITY_LABEL 
 		"Left Bank Coordinate: ", // LEFT_BANK_POSITION_LABEL 
 		"Right Bank Coordinate: ", // RIGHT_BANK_POSITION_LABEL 
 		"Water Depth: ", // WATER_DEPTH_POSITION_LABEL  
@@ -2676,7 +2682,7 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		"Creating RC Batches", // CREATING_RC_BATCHES_PROGRESS_TITLE  
 		"Error Creating RC Batch From File", // ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE 
 		"Error creating RC batch from file", // ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG 
-		"General", // GENERAL_CONFIG_TAB_LABEL    
+		"Data Files", // DATA_FILES_CONFIG_TAB_LABEL    
 		"Data Set", // DATA_SET_CONFIG_TAB_LABEL   
 		"Data Point", // DATA_POINT_CONFIG_TAB_LABEL   
 		"mm/s:1000;cm/s:100;m/s:1", // DATA_FILE_VELOCITY_UNIT_OPTIONS    
@@ -4034,6 +4040,8 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		sTheStringsLookup.put(ERROR_MOVING_TEMP_FILE_MSG_STR, ERROR_MOVING_TEMP_FILE_MSG);     
 		sTheStringsLookup.put(APPLY_STR, APPLY);     
 		sTheStringsLookup.put(UPDATING_SUMMARY_DATA_STR, UPDATING_SUMMARY_DATA);     
+		sTheStringsLookup.put(FLUID_DENSITY_LABEL_STR, FLUID_DENSITY_LABEL);
+		sTheStringsLookup.put(FLUID_KINEMATIC_VISCOSITY_LABEL_STR, FLUID_KINEMATIC_VISCOSITY_LABEL);
 		sTheStringsLookup.put(LEFT_BANK_POSITION_LABEL_STR, LEFT_BANK_POSITION_LABEL);     
 		sTheStringsLookup.put(RIGHT_BANK_POSITION_LABEL_STR, RIGHT_BANK_POSITION_LABEL);     
 		sTheStringsLookup.put(WATER_DEPTH_POSITION_LABEL_STR, WATER_DEPTH_POSITION_LABEL);     
@@ -4061,7 +4069,7 @@ public class DAStrings extends MAJFCSafeArray<String, DAStrings.DAStringIndex> {
 		sTheStringsLookup.put(CREATING_RC_BATCHES_PROGRESS_TITLE_STR, CREATING_RC_BATCHES_PROGRESS_TITLE);     
 		sTheStringsLookup.put(ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE_STR, ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_TITLE);     
 		sTheStringsLookup.put(ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG_STR, ERROR_CREATING_RC_BATCH_FROM_FILE_DIALOG_MSG);     
-		sTheStringsLookup.put(GENERAL_CONFIG_TAB_LABEL_STR, GENERAL_CONFIG_TAB_LABEL);     
+		sTheStringsLookup.put(DATA_FILES_CONFIG_TAB_LABEL_STR, DATA_FILES_CONFIG_TAB_LABEL);     
 		sTheStringsLookup.put(DATA_SET_CONFIG_TAB_LABEL_STR, DATA_SET_CONFIG_TAB_LABEL);     
 		sTheStringsLookup.put(DATA_POINT_CONFIG_TAB_LABEL_STR, DATA_POINT_CONFIG_TAB_LABEL);     
 		sTheStringsLookup.put(DATA_FILE_VELOCITY_UNIT_OPTIONS_STR, DATA_FILE_VELOCITY_UNIT_OPTIONS);     

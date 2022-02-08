@@ -264,7 +264,8 @@ public class AboutDialog extends JDialog implements ActionListener {
 		Scanner scanner = null;
 		
 		try {
-			URL url = new URL("http://www.mikejesson.com/DataAnalyserWebsite/downloads/releasenotes.txt");
+			URL url = new URL("https://raw.githubusercontent.com/MikeJesson101/VelocitySignalAnalyser/master/releasenotes.txt");
+//			URL url = new URL("http://www.mikejesson.com/DataAnalyserWebsite/downloads/releasenotes.txt");
 			scanner = new Scanner(url.openStream());
 			scanner.useDelimiter("\n");
 			

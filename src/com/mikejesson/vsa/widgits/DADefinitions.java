@@ -21,7 +21,7 @@ package com.mikejesson.vsa.widgits;
  *
  */
 public class DADefinitions {
-	public static final String VERSION = "1.5.65";
+	public static final String VERSION = "1.5.67";
 	
 	public static final int FILE_FORMAT_2_FIRST_VERSION_NUMBER = 2;
 	
@@ -100,6 +100,8 @@ public class DADefinitions {
 	public static final String XML_USE_PERCENTAGE_FOR_CORR_AND_SNR_FILTER = "use_percentage_for_corr_and_snr_filter";
 	public static final String XML_LIMITING_W_DIFF = "limiting_w_diff";
 	public static final String XML_MOVING_AVERAGE_WINDOW_SIZE = "moving_average_window_size";
+	public static final String XML_FLUID_DENSITY = "fluid_density";
+	public static final String XML_FLUID_KINEMATIC_VISCOSITY = "fluid_kinematic_viscosity";
 	public static final String XML_LEFT_BANK_POSITION = "left_bank_position";
 	public static final String XML_RIGHT_BANK_POSITION = "right_bank_position";
 	public static final String XML_WATER_DEPTH = "water_depth";
@@ -305,9 +307,7 @@ public class DADefinitions {
 	public static final String COORDINATE_SEPARATOR = "-";
 	public static final String MULTI_RUN_FILENAME_INSERT = "run" + COORDINATE_SEPARATOR;
 	
-	public static final double WATER_DENSITY_RHO = 1000;
 	public static final double GRAVITATIONAL_ACCELERATION_G = 9.807;
-	public static final double KINEMATIC_VISCOSITY_MU = 1E-6;
 	public static final double VON_KARMANS_CONSTANT = 0.41;
 	public static final double LOG_LAW_DAMPING_FACTOR_B = 26;
 	

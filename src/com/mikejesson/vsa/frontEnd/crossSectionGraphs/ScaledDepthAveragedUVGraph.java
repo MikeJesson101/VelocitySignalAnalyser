@@ -112,7 +112,8 @@ public class ScaledDepthAveragedUVGraph extends AbstractCrossSectionDerivativeGr
 		double crossSectionMeanVelocity = DAFrame.getFrame().getChannelMeanVelocityForScaling(dataSetId);
 
 		// Scale factor roe * H (water density * water depth)
-		double scaleFactor = ((mDataSetConfig.get(BackEndAPI.DSC_KEY_WATER_DEPTH) - lowerBound)/(mDataSetConfig.get(BackEndAPI.DSC_KEY_LENGTH_UNIT_SCALE_FACTOR))) * DADefinitions.WATER_DENSITY_RHO;
+		double fluidDensity = mDataSetConfig.get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+		double scaleFactor = ((mDataSetConfig.get(BackEndAPI.DSC_KEY_WATER_DEPTH) - lowerBound)/(mDataSetConfig.get(BackEndAPI.DSC_KEY_LENGTH_UNIT_SCALE_FACTOR))) * fluidDensity;
 
 		mData[dataIndex][Y_COORD_INDEX] = yCoord;
 		mData[dataIndex][DATUM_INDEX] = scaleFactor * depthAveragedUTimesV/crossSectionMeanVelocity;

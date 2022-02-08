@@ -78,6 +78,8 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 	private MAJFCDialogButton mCancelButton;
 	private MAJFCTranslatingDropDownPanel<Integer> mLengthUnitsGUI;
 	private MAJFCTranslatingDropDownPanel<Integer> mVelocityUnitsGUI;
+	private MAJFCNumberTextAreaPanel mFluidDensityGUI;
+	private MAJFCNumberTextAreaPanel mFluidKinematicViscosityGUI;
 	private MAJFCNumberTextAreaPanel mLeftBankPositionGUI;
 	private MAJFCNumberTextAreaPanel mRightBankPositionGUI;
 	private MAJFCAbstractFileOrDirChooserButton mBoundaryDefinitionFilenameGUI;
@@ -312,6 +314,10 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		mCancelButton.setVisible(mIsDialog);
 		
 		DataSetConfig defaultConfigValues = mIsDialog ? DAFrame.getFrame().getDefaultDataSetConfiguration() : DAFrame.getFrame().getCurrentDataSetConfig();
+
+		mFluidDensityGUI = new MAJFCNumberTextAreaPanel(DAStrings.getString(DAStrings.FLUID_DENSITY_LABEL), 0, 100000, defaultConfigValues.get(BackEndAPI.DSC_KEY_FLUID_DENSITY), 4, this);
+		mFluidKinematicViscosityGUI = new MAJFCNumberTextAreaPanel(DAStrings.getString(DAStrings.FLUID_KINEMATIC_VISCOSITY_LABEL), 0, 1000, defaultConfigValues.get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY), 4, this);
+
 		mLeftBankPositionGUI = new MAJFCNumberTextAreaPanel(DAStrings.getString(DAStrings.LEFT_BANK_POSITION_LABEL), -100000, 100000, defaultConfigValues.get(BackEndAPI.DSC_KEY_LEFT_BANK_POSITION), 0, this);
 		mRightBankPositionGUI = new MAJFCNumberTextAreaPanel(DAStrings.getString(DAStrings.RIGHT_BANK_POSITION_LABEL), -100000, 100000, defaultConfigValues.get(BackEndAPI.DSC_KEY_RIGHT_BANK_POSITION), 0, this);
 		String boundaryDefFilename = defaultConfigValues.get(BackEndAPI.DSC_KEY_FOR_STRING_ITEM_BOUNDARY_DEFINITION_FILENAME);
@@ -526,50 +532,49 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 
 		int y = 0;
 		int x = 0;
-		Vector<MAJFCPanel> generalConfigPanels = new Vector<MAJFCPanel>();
-		generalConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
-		generalConfigPanels.lastElement().add(mCSVDataFileDelimiter, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		generalConfigPanels.lastElement().add(mCSVFileDecimalSeparator, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		Vector<MAJFCPanel> dataFilesConfigPanels = new Vector<MAJFCPanel>();
+		dataFilesConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
+		dataFilesConfigPanels.lastElement().add(mCSVDataFileDelimiter, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mCSVFileDecimalSeparator, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 
 		x = 0;
 		y = 0;
-		generalConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
-		generalConfigPanels.lastElement().add(mCSVFileFormatLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		generalConfigPanels.lastElement().add(mCSVFileFormatGUI, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		
-		x = 0;
-		y = 0;
-		generalConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
-		generalConfigPanels.lastElement().add(mDefaultVSADataFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
-		generalConfigPanels.lastElement().add(mDefaultVSADataFilePath, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		
-		x = 0;
-		generalConfigPanels.lastElement().add(mDefaultRawDataFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
-		generalConfigPanels.lastElement().add(mDefaultRawDataFilePath, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		
-		x = 0;
-		generalConfigPanels.lastElement().add(mDefaultFileExportFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
-		generalConfigPanels.lastElement().add(mDefaultFileExportFilePath, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
+		dataFilesConfigPanels.lastElement().add(mVelocityUnitsGUI, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mLengthUnitsGUI, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 
 		x = 0;
 		y = 0;
-		generalConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
-		generalConfigPanels.lastElement().add(mUseDataFilePathForAll, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
+		dataFilesConfigPanels.lastElement().add(mDefaultVSADataFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mDefaultVSADataFilePath, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mUseBinaryFileFormat, MAJFCTools.createGridBagConstraint(x, y++, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		
+		x = 0;
+		dataFilesConfigPanels.lastElement().add(mDefaultRawDataFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mDefaultRawDataFilePath, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mCSVFileFormatLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mCSVFileFormatGUI, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		
+		x = 0;
+		dataFilesConfigPanels.lastElement().add(mDefaultFileExportFilePathLabel, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 0, 5, 0, 0, 3, 3));
+		dataFilesConfigPanels.lastElement().add(mDefaultFileExportFilePath, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 
 		x = 0;
 		y = 0;
-		int numberOfGCPanels = generalConfigPanels.size();
+		dataFilesConfigPanels.add(new MAJFCPanel(new GridBagLayout()));
+		dataFilesConfigPanels.lastElement().add(mUseDataFilePathForAll, MAJFCTools.createGridBagConstraint(x++, y++, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+
+		x = 0;
+		y = 0;
+		int numberOfGCPanels = dataFilesConfigPanels.size();
 		for (int i = 0; i < numberOfGCPanels; ++i) {
-			generalConfig.add(generalConfigPanels.elementAt(i), MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, 0, 0, 0, 0, 0));
+			generalConfig.add(dataFilesConfigPanels.elementAt(i), MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, 0, 0, 0, 0, 0));
 		}
 		
 		MAJFCPanel dataSetConfigTopPanel = new MAJFCPanel(new GridBagLayout());
 		x = 0;
 		y = 0;
-		dataSetConfigTopPanel.add(mVelocityUnitsGUI, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		dataSetConfigTopPanel.add(mLengthUnitsGUI, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		
-		x = 0;
 		dataSetConfigTopPanel.add(mLeftBankPositionGUI, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 		dataSetConfigTopPanel.add(mRightBankPositionGUI, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 		
@@ -582,8 +587,11 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		
 		x = 0;
 		dataSetConfigTopPanel.add(mBoundaryDefinitionFilenameGUI, MAJFCTools.createGridBagConstraint(x, y++, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
-		dataSetConfigTopPanel.add(mUseBinaryFileFormat, MAJFCTools.createGridBagConstraint(x, y++, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
 		
+		x = 0;
+		dataSetConfigTopPanel.add(mFluidDensityGUI, MAJFCTools.createGridBagConstraint(x++, y, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_END, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+		dataSetConfigTopPanel.add(mFluidKinematicViscosityGUI, MAJFCTools.createGridBagConstraint(x, y++, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 5, 5, 3, 3));
+
 		x = 0;
 		MAJFCPanel invertPanel = new MAJFCPanel(new GridBagLayout());
 		invertPanel.add(mInvertXAxis, MAJFCTools.createGridBagConstraint(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, 5, 5, 0, 0, 0, 0));
@@ -663,7 +671,7 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		buttonPanel.add(mCancelButton, MAJFCTools.createGridBagConstraint(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL, 5, 5, 5, 5, 3, 3));
 		
 //		if (mIsDialog) {
-			mTabbedPane.add(DAStrings.getString(DAStrings.GENERAL_CONFIG_TAB_LABEL), generalConfig);
+			mTabbedPane.add(DAStrings.getString(DAStrings.DATA_FILES_CONFIG_TAB_LABEL), generalConfig);
 			mTabbedPane.add(DAStrings.getString(DAStrings.DATA_SET_CONFIG_TAB_LABEL), dataSetConfig);
 //			mTabbedPane.add(DAStrings.getString(DAStrings.DATA_POINT_CONFIG_TAB_LABEL), dataPointConfig);
 			mTabbedPane.add(DAStrings.getString(DAStrings.PROBE_SETUP_CONFIG_TAB_LABEL), probeConfig);
@@ -706,6 +714,8 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		mUsePercentageForCorrAndSNRFilter.setSelectedReportChange(usePercentageForCorrAndSNRFilter);
 		mLimitingWDiffGUI.setValue(configData.get(BackEndAPI.DSC_KEY_LIMITING_W_DIFF));
 		mMovingAverageWindowSizeGUI.setValue(configData.get(BackEndAPI.DSC_KEY_MOVING_AVERAGE_WINDOW_SIZE));
+		mFluidDensityGUI.setValue(configData.get(BackEndAPI.DSC_KEY_FLUID_DENSITY));
+		mFluidKinematicViscosityGUI.setValue(configData.get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY));
 		mLeftBankPositionGUI.setValue(configData.get(BackEndAPI.DSC_KEY_LEFT_BANK_POSITION));
 		mRightBankPositionGUI.setValue(configData.get(BackEndAPI.DSC_KEY_RIGHT_BANK_POSITION));
 		mWaterDepthGUI.setValue(configData.get(BackEndAPI.DSC_KEY_WATER_DEPTH));
@@ -895,6 +905,10 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		} else if (mWaterDepthGUI.isSource(theEvent)) {
 			mProbeSetup.setWaterDepth(mRightBankPositionGUI.getValue());
 			mDataFieldChanged.set(BackEndAPI.DSC_KEY_WATER_DEPTH, true);
+		} else if (mFluidDensityGUI.isSource(theEvent)) {
+			mDataFieldChanged.set(BackEndAPI.DSC_KEY_FLUID_DENSITY, true);
+		} else if (mFluidKinematicViscosityGUI.isSource(theEvent)) {
+			mDataFieldChanged.set(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY, true);
 		} else if (mMeasuredDischargeGUI.isSource(theEvent)) {
 			mDataFieldChanged.set(BackEndAPI.DSC_KEY_MEASURED_DISCHARGE, true);
 		} else if (mModifiedPSTAutoSafeLevelC1GUI.isSource(theEvent)) {
@@ -960,6 +974,8 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		configData.set(BackEndAPI.DSC_KEY_LENGTH_UNIT_SCALE_FACTOR, mLengthUnitsGUI.getSelectedItem().doubleValue());
 		configData.set(BackEndAPI.DSC_KEY_VELOCITY_UNIT_SCALE_FACTOR, mVelocityUnitsGUI.getSelectedItem().doubleValue());
 		configData.set(BackEndAPI.DSC_KEY_EXCLUDE_LEVEL, mExcludeLevelGUI.getValue());
+		configData.set(BackEndAPI.DSC_KEY_FLUID_DENSITY, mFluidDensityGUI.getValue());
+		configData.set(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY, mFluidKinematicViscosityGUI.getValue());
 		configData.set(BackEndAPI.DSC_KEY_LEFT_BANK_POSITION, mLeftBankPositionGUI.getValue());
 		configData.set(BackEndAPI.DSC_KEY_RIGHT_BANK_POSITION, mRightBankPositionGUI.getValue());
 		configData.set(BackEndAPI.DSC_KEY_WATER_DEPTH, mWaterDepthGUI.getValue());
@@ -1368,6 +1384,8 @@ public class ConfigurationPanel extends MAJFCPanel implements ActionListener, It
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_MOVING_AVERAGE_WINDOW_SIZE, configData.get(BackEndAPI.DSC_KEY_MOVING_AVERAGE_WINDOW_SIZE)));
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_DATA_SET_LENGTH_SCALE_FACTOR, configData.get(BackEndAPI.DSC_KEY_LENGTH_UNIT_SCALE_FACTOR)));
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_DATA_FILE_VELOCITY_SCALE_FACTOR, configData.get(BackEndAPI.DSC_KEY_VELOCITY_UNIT_SCALE_FACTOR)));
+		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_FLUID_DENSITY, configData.get(BackEndAPI.DSC_KEY_FLUID_DENSITY)));
+		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_FLUID_KINEMATIC_VISCOSITY, configData.get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY)));
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_LEFT_BANK_POSITION, configData.get(BackEndAPI.DSC_KEY_LEFT_BANK_POSITION)));
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_RIGHT_BANK_POSITION, configData.get(BackEndAPI.DSC_KEY_RIGHT_BANK_POSITION)));
 		configString.append(DAFileOutputStringBuffer.makeXMLNode(DADefinitions.XML_WATER_DEPTH, configData.get(BackEndAPI.DSC_KEY_WATER_DEPTH)));

@@ -116,7 +116,13 @@ public class TurbulenceGenerationOrDissipationGraph extends ReynoldsStressGraph 
 		
 		//return datum/(DADefinitions.KINEMATIC_VISCOSITY_MU * zSortedDerivativesLookup.get(zCoord));
 		if (mDissipation) {
-			return DADefinitions.KINEMATIC_VISCOSITY_MU * Math.pow(coord2SortedDerivativesLookup.get(coord2), 2);
+			double kinematicViscosity = 1.0;
+			try {
+				kinematicViscosity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY);
+				kinematicViscosity *= 1E-6;
+			} catch (BackEndAPIException theException) {
+			}
+			return kinematicViscosity * Math.pow(coord2SortedDerivativesLookup.get(coord2), 2);
 		} else {
 			return datum * coord2SortedDerivativesLookup.get(coord2);
 		}

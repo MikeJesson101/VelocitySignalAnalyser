@@ -56,8 +56,9 @@ public class CombinedReynoldsStressMagnitudeGraph extends AbstractCrossSectionCo
 	 * {@link AbstractCrossSectionColourCodedGraph#getDatumAt(AbstractDataSetUniqueId, DataPointSummaryIndex, int, int)}
 	 */
 	protected double getDatumAt(AbstractDataSetUniqueId dataSetId, DataPointSummaryIndex dpsIndex, int yCoord, int zCoord) throws BackEndAPIException {
-		double horizontalRS = - DADefinitions.WATER_DENSITY_RHO * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_V_PRIME_MEAN);
-		double verticalRS = - DADefinitions.WATER_DENSITY_RHO * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_W_PRIME_MEAN);
+		double fluidDensity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+		double horizontalRS = - fluidDensity * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_V_PRIME_MEAN);
+		double verticalRS = - fluidDensity * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_W_PRIME_MEAN);
 		
 		return Math.sqrt(Math.pow(horizontalRS, 2) + Math.pow(verticalRS, 2));
 	}

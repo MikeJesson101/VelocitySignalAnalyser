@@ -78,7 +78,13 @@ public class ReynoldsStressGraph extends AbstractCrossSectionColourCodedGraph {
 		super.initialise(initialisationObjects);
 		
 		if ((Boolean) initialisationObjects[0] == true) {
-			mScaleFactor = - DADefinitions.WATER_DENSITY_RHO;
+			try {
+				double fluidDensity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+				mScaleFactor = - fluidDensity;
+			} catch (BackEndAPIException theException) {
+				mScaleFactor = 1.0;
+			}
+
 		} else {
 			mScaleFactor = 1.0;
 		}

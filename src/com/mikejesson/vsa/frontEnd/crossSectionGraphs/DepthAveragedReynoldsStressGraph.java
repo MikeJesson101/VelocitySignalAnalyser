@@ -70,18 +70,25 @@ public class DepthAveragedReynoldsStressGraph extends AbstractCrossSectionGraph 
 			
 			for (int j = 0; j < numberOfDataItems; ++j) {
 				int zCoord = zCoords.elementAt(j);
-				
+
 				try {
 					uPrimevPrimeSum += DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_V_PRIME_MEAN);
 					uPrimewPrimeSum += DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_W_PRIME_MEAN);
 				} catch (BackEndAPIException theException) {
-					
+
 				}
 			}
 
-			mData[i][Y_COORD_INDEX] = yCoord;
-			mData[i][U_PRIME_V_PRIME_MEAN_INDEX] = -DADefinitions.WATER_DENSITY_RHO * uPrimevPrimeSum/numberOfDataItems/crossSectionMeanVelocitySquared;
-			mData[i][U_PRIME_W_PRIME_MEAN_INDEX] = -DADefinitions.WATER_DENSITY_RHO * uPrimewPrimeSum/numberOfDataItems/crossSectionMeanVelocitySquared;
+			try {
+				double fluidDensity = DAFrame.getBackEndAPI().getConfigData(dataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+				mData[i][Y_COORD_INDEX] = yCoord;
+				mData[i][U_PRIME_V_PRIME_MEAN_INDEX] = -fluidDensity * uPrimevPrimeSum/numberOfDataItems/crossSectionMeanVelocitySquared;
+				mData[i][U_PRIME_W_PRIME_MEAN_INDEX] = -fluidDensity * uPrimewPrimeSum/numberOfDataItems/crossSectionMeanVelocitySquared;
+			} catch (BackEndAPIException theException) {
+				mData[i][U_PRIME_V_PRIME_MEAN_INDEX] = -999;
+				mData[i][U_PRIME_W_PRIME_MEAN_INDEX] = -999;
+			}
+
 		}
 	}
 	

@@ -28,9 +28,11 @@ import java.util.Vector;
 import com.mikejesson.majfc.guiComponents.MAJFCStackedPanelWithFrame;
 import com.mikejesson.majfc.helpers.MAJFCMaths;
 import com.mikejesson.majfc.helpers.MAJFCTools.MAJFCToolsException;
+import com.mikejesson.vsa.backEndExposed.BackEndAPI;
 import com.mikejesson.vsa.backEndExposed.BackEndAPIException;
 import com.mikejesson.vsa.backEndExposed.BackEndAPI.AbstractDataSetUniqueId;
 import com.mikejesson.vsa.backEndExposed.BackEndAPI.DataPointSummaryIndex;
+import com.mikejesson.vsa.frontEnd.DAFrame;
 import com.mikejesson.vsa.frontEnd.verticalAndHorizontalSectionGraphs.SectionGraph;
 import com.mikejesson.vsa.widgits.DADefinitions;
 import com.mikejesson.vsa.widgits.DAStrings;
@@ -75,7 +77,13 @@ public class StreamwiseVorticityKEGraph extends AbstractCrossSectionColourCodedG
 		// Now we have y-indexed then z-indexed lookup of E = (dW/dy - dV/dz)
 		int numberOfYCoords = sortedYCoords.size();
 		Vector<Double> dataValues = new Vector<Double>(1000);
-		
+
+		double fluidDensity = 0.0;
+		try {
+			fluidDensity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+		} catch (BackEndAPIException theException) {
+		}
+
 		for (int yCoordIndex = 0; yCoordIndex < numberOfYCoords; ++yCoordIndex) {
 			Integer yCoord = sortedYCoords.elementAt(yCoordIndex);
 			Vector<Integer> sortedZCoords = sortedZCoordsSets.elementAt(yCoordIndex);
@@ -88,7 +96,7 @@ public class StreamwiseVorticityKEGraph extends AbstractCrossSectionColourCodedG
 				
 				datum[yCoordIndexInDataArray] = yCoord.doubleValue();
 				datum[zCoordIndexInDataArray] = zCoord.doubleValue();
-				datum[dataIndexInDataArray] = (1d/4) * DADefinitions.WATER_DENSITY_RHO * Math.pow(zIndexedDWByDyMinusDVByDz.get(zCoord), 2);
+				datum[dataIndexInDataArray] = (1d/4) * fluidDensity * Math.pow(zIndexedDWByDyMinusDVByDz.get(zCoord), 2);
 				dataValues.add(datum[dataIndexInDataArray]);
 				
 				data.add(datum);

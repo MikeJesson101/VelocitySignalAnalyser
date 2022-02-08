@@ -59,8 +59,13 @@ public class TransferOfStreamwiseMomentumGraph extends AbstractCrossSectionColou
 	protected double getDatumAt(AbstractDataSetUniqueId dataSetId, DataPointSummaryIndex dpsIndex, int yCoord, int zCoord) throws BackEndAPIException {
 		double uBar = DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_MEAN_FILTERED_AND_TRANSLATED_AND_BATCH_RC_VELOCITY);
 		double otherBar = DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, mDPSIndex);
+		double fluidDensity = 0.0;
+		try {
+			fluidDensity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+		} catch (BackEndAPIException theException) {
+		}
 
-		return DADefinitions.WATER_DENSITY_RHO * uBar * otherBar;
+		return fluidDensity * uBar * otherBar;
 	}
 	
 	@Override

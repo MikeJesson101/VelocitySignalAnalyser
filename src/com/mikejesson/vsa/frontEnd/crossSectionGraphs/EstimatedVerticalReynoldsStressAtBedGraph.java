@@ -97,12 +97,19 @@ public class EstimatedVerticalReynoldsStressAtBedGraph extends AbstractCrossSect
 			LinkedList<Double> zCoordsAbove0Point2ForFitList = new LinkedList<Double>();
 			LinkedList<Double> uPrimeWPrimesPointsAbove0Point2ForFitList = new LinkedList<Double>();
 
+			double fluidDensity = 0;
+			try {
+				fluidDensity = DAFrame.getBackEndAPI().getConfigData(dataSetId).get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+			} catch (BackEndAPIException theException) {
+				
+			}
+			
 			for (int zCoordIndex = 0; zCoordIndex < numberOfZCoords; ++zCoordIndex) {
 				int zCoord = sortedZCoords.elementAt(zCoordIndex);
 				zCoordsForFit[zCoordIndex] = zCoord;
 				
 				try {
-					uPrimeWPrimesForFit[zCoordIndex] = -DADefinitions.WATER_DENSITY_RHO * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_W_PRIME_MEAN);
+					uPrimeWPrimesForFit[zCoordIndex] = -fluidDensity * DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_PRIME_W_PRIME_MEAN);
 					uPrimeWPrimesForFitList.addLast(uPrimeWPrimesForFit[zCoordIndex]);
 
 					double uMean = DAFrame.getBackEndAPI().getDataPointSummaryDataFieldAtPoint(dataSetId, yCoord, zCoord, BackEndAPI.DPS_KEY_U_MEAN_FILTERED_AND_TRANSLATED_AND_BATCH_RC_VELOCITY);
@@ -160,7 +167,7 @@ public class EstimatedVerticalReynoldsStressAtBedGraph extends AbstractCrossSect
 			mData[yCoordIndex][DATUM_INDEX] = linearExtrapolationEstimateAllPoints;
 			mData[yCoordIndex][DATUM_INDEX + 1] = linearExtrapolationEstimateBottomTwoPoints;
 			mData[yCoordIndex][DATUM_INDEX + 2] = meanOfBottomThreePoints;
-			mData[yCoordIndex][DATUM_INDEX + 3] = Math.pow(MAJFCMaths.mean(shearVelocitiesFromLogLaw), 2) * DADefinitions.WATER_DENSITY_RHO;
+			mData[yCoordIndex][DATUM_INDEX + 3] = Math.pow(MAJFCMaths.mean(shearVelocitiesFromLogLaw), 2) * fluidDensity;
 			mData[yCoordIndex][DATUM_INDEX + 4] = MAJFCMaths.mean(roughSideKsFromLogLaw);
 			mData[yCoordIndex][DATUM_INDEX + 5] = zEquals10Value;
 			mData[yCoordIndex][DATUM_INDEX + 6] = zEquals20Value;
@@ -190,10 +197,16 @@ public class EstimatedVerticalReynoldsStressAtBedGraph extends AbstractCrossSect
 		double oldShearVelocity = Double.MAX_VALUE;
 		double zPlus = Double.MAX_VALUE;
 		final double precision = 1e-6;
-		
+		double kinematicViscosity = 1.0;
+		try {
+			kinematicViscosity = DAFrame.getBackEndAPI().getConfigData(getDataSetId()).get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY);
+			kinematicViscosity *= 1E-6;
+		} catch (BackEndAPIException theException) {
+		}
+
 		while (Math.abs(oldShearVelocity - shearVelocity) > precision) {
 			oldShearVelocity = shearVelocity;
-			zPlus = (((double) zCoord)/1000) * oldShearVelocity / DADefinitions.KINEMATIC_VISCOSITY_MU;
+			zPlus = (((double) zCoord)/1000) * oldShearVelocity / kinematicViscosity;
 			shearVelocity = uMean/((1/DADefinitions.VON_KARMANS_CONSTANT) * Math.log(zPlus) + 5);
 		}
 		
@@ -203,7 +216,7 @@ public class EstimatedVerticalReynoldsStressAtBedGraph extends AbstractCrossSect
 		} catch (Exception e) {
 		}
 		
-		double rStar = shearVelocity * (waterDepth/1000)/DADefinitions.KINEMATIC_VISCOSITY_MU;
+		double rStar = shearVelocity * (waterDepth/1000)/kinematicViscosity;
 		if (zPlus <= DADefinitions.LOG_LAW_DAMPING_FACTOR_B || zPlus > 0.2 * rStar) {
 			return Double.NaN;
 		}

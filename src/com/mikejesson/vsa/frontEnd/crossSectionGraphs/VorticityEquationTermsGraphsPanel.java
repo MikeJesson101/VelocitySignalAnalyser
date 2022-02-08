@@ -198,7 +198,12 @@ public class VorticityEquationTermsGraphsPanel extends MAJFCStackedPanelWithFram
 			// Now we have two y- then z-coordinate indexed lookups, one of d2E/dy2 and one of d2E/dz2
 			int numberOfYCoords = sortedYCoords.size();
 			Vector<Double> dataValues = new Vector<Double>(1000);
-
+			double kinematicViscosity = 1.0;
+			try {
+				kinematicViscosity = DAFrame.getBackEndAPI().getConfigData(mDataSetId).get(BackEndAPI.DSC_KEY_FLUID_KINEMATIC_VISCOSITY);
+				kinematicViscosity *= 1E-6;
+			} catch (BackEndAPIException theException) {
+			}
 			for (int yCoordIndex = 0; yCoordIndex < numberOfYCoords; ++yCoordIndex) {
 				Integer yCoord = sortedYCoords.elementAt(yCoordIndex);
 				Vector<Integer> zCoordsForThisY = sortedZCoordsSets.elementAt(yCoordIndex);
@@ -211,7 +216,7 @@ public class VorticityEquationTermsGraphsPanel extends MAJFCStackedPanelWithFram
 					datum[yCoordIndexInDataArray] = yCoord.doubleValue();
 					datum[zCoordIndexInDataArray] = zCoord.doubleValue();
 					
-					datum[dataIndexInDataArray] = DADefinitions.KINEMATIC_VISCOSITY_MU * (yThenZIndexedD2EByDy2.get(yCoord).get(zCoord) + yThenZIndexedD2EByDz2.get(yCoord).get(zCoord));
+					datum[dataIndexInDataArray] = kinematicViscosity * (yThenZIndexedD2EByDy2.get(yCoord).get(zCoord) + yThenZIndexedD2EByDz2.get(yCoord).get(zCoord));
 					dataValues.add(datum[dataIndexInDataArray]);
 					
 					data.add(datum);

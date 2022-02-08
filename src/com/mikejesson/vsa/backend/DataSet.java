@@ -1125,8 +1125,9 @@ public class DataSet {
 		
 		// R = A/P
 		double wettedPerimeter = mConfigData.get(BackEndAPI.DSC_KEY_WETTED_PERIMETER);
-		double hydraulicRadius = crossSectionArea/wettedPerimeter; 
-		mCrossSectionData[BackEndAPI.CSD_KEY_MEAN_BOUNDARY_SHEAR.getIntIndex()] = DADefinitions.WATER_DENSITY_RHO * DADefinitions.GRAVITATIONAL_ACCELERATION_G * hydraulicRadius * bedSlope;
+		double hydraulicRadius = crossSectionArea/wettedPerimeter;
+		double fluidDensity = mConfigData.get(BackEndAPI.DSC_KEY_FLUID_DENSITY);
+		mCrossSectionData[BackEndAPI.CSD_KEY_MEAN_BOUNDARY_SHEAR.getIntIndex()] = fluidDensity * DADefinitions.GRAVITATIONAL_ACCELERATION_G * hydraulicRadius * bedSlope;
 
 		Vector<LinkedDataSet> linkedDataSets = getAllLinkedDataSets();
 		int numberOfLinkedDataSets = linkedDataSets.size();

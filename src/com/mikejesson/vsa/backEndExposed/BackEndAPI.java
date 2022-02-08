@@ -207,6 +207,8 @@ public class BackEndAPI {
 	public static final DataSetConfigIndex DSC_KEY_LENGTH_UNIT_SCALE_FACTOR = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
 	public static final DataSetConfigIndex DSC_KEY_VELOCITY_UNIT_SCALE_FACTOR = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
 	public static final DataSetConfigIndex DSC_KEY_EXCLUDE_LEVEL = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
+	public static final DataSetConfigIndex DSC_KEY_FLUID_DENSITY = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
+	public static final DataSetConfigIndex DSC_KEY_FLUID_KINEMATIC_VISCOSITY = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
 	public static final DataSetConfigIndex DSC_KEY_LEFT_BANK_POSITION = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
 	public static final DataSetConfigIndex DSC_KEY_RIGHT_BANK_POSITION = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
 	public static final DataSetConfigIndex DSC_KEY_WATER_DEPTH = new DataSetConfigIndex(NUMBER_OF_DATA_SET_CONFIG_KEYS++);
